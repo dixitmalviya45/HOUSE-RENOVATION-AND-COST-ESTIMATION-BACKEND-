@@ -1,0 +1,315 @@
+"""
+Seed the materials catalog with 20+ INR-priced items.
+
+Run (after Phase 4 wiring): python seed_materials.py
+Phase 1: data defined; insert logic activates once DB is configured.
+"""
+
+MATERIALS = [
+    # Paints
+    {
+        "name": "Royal Exterior Emulsion",
+        "category": "paint",
+        "applicable_to": ["walls", "pillars", "parapet"],
+        "rate_per_sqft": 12,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 5,
+        "labor_rate_per_sqft": 8,
+        "durability": "medium",
+        "maintenance": "medium",
+        "description": "Premium exterior emulsion for walls",
+    },
+    {
+        "name": "Ace Exterior Emulsion",
+        "category": "paint",
+        "applicable_to": ["walls", "pillars"],
+        "rate_per_sqft": 10,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 5,
+        "labor_rate_per_sqft": 8,
+        "durability": "medium",
+        "maintenance": "low",
+        "description": "Budget-friendly exterior emulsion",
+    },
+    {
+        "name": "Apex Ultima Weather Proof",
+        "category": "paint",
+        "applicable_to": ["walls", "pillars", "parapet"],
+        "rate_per_sqft": 18,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 5,
+        "labor_rate_per_sqft": 10,
+        "durability": "high",
+        "maintenance": "low",
+        "description": "Weather-proof exterior paint",
+    },
+    {
+        "name": "Texture Paint Rustic",
+        "category": "paint",
+        "applicable_to": ["walls"],
+        "rate_per_sqft": 25,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 8,
+        "labor_rate_per_sqft": 15,
+        "durability": "high",
+        "maintenance": "medium",
+        "description": "Rustic textured exterior paint",
+    },
+    {
+        "name": "Metallic Finish Paint",
+        "category": "paint",
+        "applicable_to": ["walls", "pillars"],
+        "rate_per_sqft": 35,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 8,
+        "labor_rate_per_sqft": 15,
+        "durability": "medium",
+        "maintenance": "medium",
+        "description": "Metallic accent exterior finish",
+    },
+    # Tiles
+    {
+        "name": "Ceramic Wall Tile 300x600",
+        "category": "tiles",
+        "applicable_to": ["walls", "pillars"],
+        "rate_per_sqft": 45,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 10,
+        "labor_rate_per_sqft": 25,
+        "durability": "high",
+        "maintenance": "low",
+        "description": "Standard ceramic wall tiles",
+    },
+    {
+        "name": "Porcelain Tile 600x600",
+        "category": "tiles",
+        "applicable_to": ["walls"],
+        "rate_per_sqft": 65,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 10,
+        "labor_rate_per_sqft": 30,
+        "durability": "high",
+        "maintenance": "low",
+        "description": "Large-format porcelain tiles",
+    },
+    {
+        "name": "Mosaic Tile Pattern",
+        "category": "tiles",
+        "applicable_to": ["walls", "pillars"],
+        "rate_per_sqft": 80,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 12,
+        "labor_rate_per_sqft": 35,
+        "durability": "high",
+        "maintenance": "medium",
+        "description": "Decorative mosaic tile pattern",
+    },
+    {
+        "name": "Subway Tile White",
+        "category": "tiles",
+        "applicable_to": ["walls"],
+        "rate_per_sqft": 55,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 10,
+        "labor_rate_per_sqft": 25,
+        "durability": "high",
+        "maintenance": "low",
+        "description": "Classic white subway tiles",
+    },
+    # Cladding
+    {
+        "name": "Natural Stone Cladding",
+        "category": "cladding",
+        "applicable_to": ["walls", "pillars"],
+        "rate_per_sqft": 120,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 10,
+        "labor_rate_per_sqft": 45,
+        "durability": "high",
+        "maintenance": "low",
+        "description": "Natural stone exterior cladding",
+    },
+    {
+        "name": "Italian Marble Cladding",
+        "category": "cladding",
+        "applicable_to": ["walls", "pillars"],
+        "rate_per_sqft": 150,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 10,
+        "labor_rate_per_sqft": 50,
+        "durability": "high",
+        "maintenance": "medium",
+        "description": "Premium Italian marble cladding",
+    },
+    {
+        "name": "Slate Cladding",
+        "category": "cladding",
+        "applicable_to": ["walls"],
+        "rate_per_sqft": 100,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 10,
+        "labor_rate_per_sqft": 40,
+        "durability": "high",
+        "maintenance": "low",
+        "description": "Slate stone cladding",
+    },
+    {
+        "name": "Brick Veneer",
+        "category": "cladding",
+        "applicable_to": ["walls", "pillars"],
+        "rate_per_sqft": 85,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 8,
+        "labor_rate_per_sqft": 35,
+        "durability": "high",
+        "maintenance": "low",
+        "description": "Brick veneer cladding",
+    },
+    {
+        "name": "WPC Wall Cladding",
+        "category": "cladding",
+        "applicable_to": ["walls"],
+        "rate_per_sqft": 95,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 5,
+        "labor_rate_per_sqft": 30,
+        "durability": "medium",
+        "maintenance": "low",
+        "description": "Wood-plastic composite wall cladding",
+    },
+    # Railing (rates per running foot — stored in rate_per_sqft field per schema)
+    {
+        "name": "SS Railing",
+        "category": "railing",
+        "applicable_to": ["railing", "balcony", "gate"],
+        "rate_per_sqft": 1800,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 5,
+        "labor_rate_per_sqft": 400,
+        "durability": "high",
+        "maintenance": "low",
+        "description": "Stainless steel railing (per rft)",
+    },
+    {
+        "name": "Glass + Steel Frame Railing",
+        "category": "railing",
+        "applicable_to": ["railing", "balcony"],
+        "rate_per_sqft": 2000,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 5,
+        "labor_rate_per_sqft": 500,
+        "durability": "high",
+        "maintenance": "medium",
+        "description": "Glass railing with steel frame (per rft)",
+    },
+    {
+        "name": "Wrought Iron Railing",
+        "category": "railing",
+        "applicable_to": ["railing", "balcony", "gate"],
+        "rate_per_sqft": 1200,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 5,
+        "labor_rate_per_sqft": 350,
+        "durability": "medium",
+        "maintenance": "medium",
+        "description": "Decorative wrought iron railing (per rft)",
+    },
+    {
+        "name": "Aluminum Railing",
+        "category": "railing",
+        "applicable_to": ["railing", "balcony"],
+        "rate_per_sqft": 1500,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 5,
+        "labor_rate_per_sqft": 400,
+        "durability": "medium",
+        "maintenance": "low",
+        "description": "Lightweight aluminum railing (per rft)",
+    },
+    # Texture
+    {
+        "name": "Sand Finish Texture",
+        "category": "texture",
+        "applicable_to": ["walls"],
+        "rate_per_sqft": 20,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 8,
+        "labor_rate_per_sqft": 12,
+        "durability": "medium",
+        "maintenance": "medium",
+        "description": "Sand finish wall texture",
+    },
+    {
+        "name": "Roller Texture",
+        "category": "texture",
+        "applicable_to": ["walls"],
+        "rate_per_sqft": 22,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 8,
+        "labor_rate_per_sqft": 12,
+        "durability": "medium",
+        "maintenance": "medium",
+        "description": "Roller-applied wall texture",
+    },
+    {
+        "name": "Knockdown Texture",
+        "category": "texture",
+        "applicable_to": ["walls"],
+        "rate_per_sqft": 28,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 8,
+        "labor_rate_per_sqft": 15,
+        "durability": "medium",
+        "maintenance": "medium",
+        "description": "Knockdown textured finish",
+    },
+    # Panels
+    {
+        "name": "ACP Panels",
+        "category": "panels",
+        "applicable_to": ["walls", "pillars"],
+        "rate_per_sqft": 110,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 8,
+        "labor_rate_per_sqft": 40,
+        "durability": "high",
+        "maintenance": "low",
+        "description": "Aluminium composite panel cladding",
+    },
+    {
+        "name": "HPL Panels",
+        "category": "panels",
+        "applicable_to": ["walls"],
+        "rate_per_sqft": 130,
+        "coverage_per_unit": 1.0,
+        "wastage_percent": 8,
+        "labor_rate_per_sqft": 45,
+        "durability": "high",
+        "maintenance": "low",
+        "description": "High-pressure laminate exterior panels",
+    },
+]
+
+
+async def seed() -> None:
+    """Insert seed materials if the collection is empty. Wired fully in Phase 4."""
+    from app.database import init_db
+    from app.models.material import Material
+
+    await init_db()
+    existing = await Material.count()
+    if existing > 0:
+        print(f"Materials already seeded ({existing} items). Skipping.")
+        return
+
+    for item in MATERIALS:
+        material = Material(texture_image_url="", **item)
+        await material.insert()
+
+    print(f"Seeded {len(MATERIALS)} materials.")
+
+
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(seed())
