@@ -34,15 +34,43 @@ class Settings(BaseSettings):
     roboflow_model: str = "door-window-detection/1"
 
     app_env: str = "development"
-    cors_origins: str = "http://localhost:5173"
+    cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
+    # Matches Vercel preview + production hostnames when CORS_ORIGINS is not exhaustive
+    cors_origin_regex: str = r"https://.*\.vercel\.app"
 
     roboflow_monthly_limit: int = 1000
     roboflow_warn_threshold: int = 50
 
     @property
+    def is_production(self) -> bool:
+        """True when running on Render or any production host."""
+        return self.app_env.lower() in {"production", "prod", "render"}
+
+    @property
     def cors_origins_list(self) -> List[str]:
-        """Parse comma-separated CORS origins into a list."""
-        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+        """Parse comma-separated CORS origins into a list (no trailing slashes)."""
+        return [
+            origin.strip().rstrip("/")
+            for origin in self.cors_origins.split(",")
+            if origin.strip()
+        ]
+
+    def validate_for_hosting(self) -> None:
+        """Fail fast on Render if required production secrets are still placeholders."""
+        if not self.is_production:
+            return
+        weak_jwt = self.jwt_secret_key in {
+            "change-me-in-production",
+            "change-me-to-a-long-random-secret-key",
+        }
+        if weak_jwt or len(self.jwt_secret_key) < 32:
+            raise RuntimeError(
+                "Set JWT_SECRET_KEY to a long random value before deploying to Render."
+            )
+        if "localhost" in self.mongodb_uri or "127.0.0.1" in self.mongodb_uri:
+            raise RuntimeError(
+                "Set MONGODB_URI to MongoDB Atlas (not localhost) for Render."
+            )
 
 
 @lru_cache

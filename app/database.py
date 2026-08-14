@@ -1,5 +1,7 @@
 """MongoDB connection and Beanie ODM initialization."""
 
+import sys
+
 import certifi
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
@@ -24,10 +26,12 @@ async def init_db() -> None:
             {
                 "tls": True,
                 "tlsCAFile": certifi.where(),
-                # Workaround for Python 3.14 OpenSSL handshake quirks with Atlas
-                "tlsAllowInvalidCertificates": True,
             }
         )
+        # Python 3.14 on Windows often fails the Atlas handshake.
+        # Do not weaken TLS on Render (Linux 3.12).
+        if sys.version_info >= (3, 14) and not settings.is_production:
+            kwargs["tlsAllowInvalidCertificates"] = True
 
     client = AsyncIOMotorClient(uri, **kwargs)
     try:

@@ -49,6 +49,8 @@ async def _seed_materials_if_empty() -> None:
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     """Initialize database on startup and seed materials if needed."""
+    settings = get_settings()
+    settings.validate_for_hosting()
     await init_db()
     await _seed_materials_if_empty()
     yield
@@ -67,6 +69,7 @@ def create_app() -> FastAPI:
     application.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins_list,
+        allow_origin_regex=settings.cors_origin_regex or None,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -82,7 +85,7 @@ def create_app() -> FastAPI:
     application.include_router(estimation.router, prefix=api_prefix)
     application.include_router(report.router, prefix=api_prefix)
 
-    @application.get("/health")
+    @application.api_route("/health", methods=["GET", "HEAD"])
     async def health():
         """Liveness probe for Render / local checks."""
         return {"status": "ok", "service": "e2m", "env": settings.app_env}

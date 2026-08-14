@@ -1,0 +1,2 @@
+# Keep Render start script executable on Linux (avoid CRLF from Windows)
+start.sh text eol=lf
